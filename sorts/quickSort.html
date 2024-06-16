@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark" >
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Быстрая сортировка</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+      crossorigin="anonymous"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.7.2/styles/default.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.7.2/highlight.min.js"></script>
+    <script>hljs.highlightAll();</script>
+</head>
+</head>
+<body class="container">
+    <div class="pb-3 pt-4 text-right">
+        <h1 class="mx-3"><a class="link-offset-2 link-underline link-underline-opacity-0 text-primary" href="../">Визуализатор сортировок</a> - Быстрая сортировка</h1>
+    </div>
+    <div class="row m-2">
+        <h5 for="usernumbersInput" class="form-label col-sm-5 my-3">Введите свой набор чисел от 1 до 1000 через пробел:</h5>
+        <input type="text" id="usernumbersInput" class="form-control my-2 col" aria-describedby="passwordHelpBlock" oninvalid="this.initMain">
+        <button id="userNumbersBtn" class="btn btn-outline-light col-2 m-2">
+            <svg width="20px" viewBox="0 0 24 24" id="create-note" class="icon glyph m-1" style="fill:#ffffff">
+                <path d="M20.71,3.29a2.91,2.91,0,0,0-2.2-.84,3.25,3.25,0,0,0-2.17,1L9.46,10.29s0,0,0,0a.62.62,0,0,0-.11.17,1,1,0,0,0-.1.18l0,0L8,14.72A1,1,0,0,0,9,16a.9.9,0,0,0,.28,0l4-1.17,0,0,.18-.1a.62.62,0,0,0,.17-.11l0,0,6.87-6.88a3.25,3.25,0,0,0,1-2.17A2.91,2.91,0,0,0,20.71,3.29Z"/>
+                <path d="M20,22H4a2,2,0,0,1-2-2V4A2,2,0,0,1,4,2h8a1,1,0,0,1,0,2H4V20H20V12a1,1,0,0,1,2,0v8A2,2,0,0,1,20,22Z"/>
+            </svg>
+            Инициализировать
+        </button>
+    </div>
+    <div class="container">
+        <div class="row mt-2">
+            <button id="shaffleBtn" class="btn btn-outline-light col my-3 mx-2">
+                <svg width="20px" style="fill:#ffffff" viewBox="0 0 32 32" version="1.1">
+                    <title>random</title>
+                    <path d="M0 24q0 0.832 0.576 1.44t1.44 0.576h1.984q2.048 0 3.904-0.8t3.168-2.144 2.144-3.2 0.8-3.872q0-2.464 1.728-4.224t4.256-1.76h4v1.984q0 0.672 0.384 1.152t0.864 0.704 1.12 0.128 1.056-0.544l4-4q0.608-0.64 0.576-1.44t-0.576-1.408l-4-4q-0.48-0.448-1.088-0.544t-1.12 0.128-0.864 0.704-0.352 1.12v2.016h-4q-2.016 0-3.872 0.8t-3.2 2.112-2.144 3.2-0.768 3.872q0 2.496-1.76 4.256t-4.256 1.76h-1.984q-0.832 0-1.44 0.576t-0.576 1.408zM0 8.032q0 0.832 0.576 1.408t1.44 0.576h1.984q1.408 0 2.592 0.608t2.080 1.664q0.672-2.048 1.984-3.68-2.912-2.592-6.656-2.592h-1.984q-0.832 0-1.44 0.608t-0.576 1.408zM13.376 23.456q2.848 2.56 6.624 2.56h4v2.016q0 0.64 0.384 1.152t0.864 0.704 1.12 0.096 1.056-0.544l4-4q0.608-0.608 0.576-1.44t-0.576-1.376l-4-4q-0.48-0.48-1.088-0.576t-1.12 0.128-0.864 0.736-0.352 1.12v1.984h-4q-1.376 0-2.592-0.576t-2.048-1.664q-0.704 2.048-1.984 3.68z"/>
+                </svg>
+                Размешать
+            </button>
+            <button id="sortBtn" class="btn btn-outline-light col m-3">
+                <svg  width="20px" style="fill:#ffffff" viewBox="0 0 24 24">
+                    <path d="M16.6582 9.28638C18.098 10.1862 18.8178 10.6361 19.0647 11.2122C19.2803 11.7152 19.2803 12.2847 19.0647 12.7878C18.8178 13.3638 18.098 13.8137 16.6582 14.7136L9.896 18.94C8.29805 19.9387 7.49907 20.4381 6.83973 20.385C6.26501 20.3388 5.73818 20.0469 5.3944 19.584C5 19.053 5 18.1108 5 16.2264V7.77357C5 5.88919 5 4.94701 5.3944 4.41598C5.73818 3.9531 6.26501 3.66111 6.83973 3.6149C7.49907 3.5619 8.29805 4.06126 9.896 5.05998L16.6582 9.28638Z"/>
+                </svg>
+                    Сортировать
+                </button>
+            <div class="col-sm-4">
+                <h5 class="form-label">Количество элементов:
+                    <span id="elementsCount">50</span>
+                </h3>
+                <input id="sizeInput" class="form-range" type="range" min="5" max="1000" value="40">
+            </div>
+            <div class="col-sm-4">
+                <h5 class="form-label">Скорость Сортировки:</h3>
+                <input id="speedInput" class="form-range" type="range" min="0" max="1500" value="1500">
+            </div>
+        </div>
+    </div>
+    
+
+    <div id="mainWindow" class="mainWindow w-100 h-10"></div>
+    
+    <div id="codes">
+        <ul class="nav nav-tabs pt-4" id="myTab" role="tablist">
+            <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#js" type="button" role="tab" aria-controls="js" aria-selected="true">JavaScript</button>
+            </li>
+            <li class="nav-item" role="presentation">
+            <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#py" type="button" role="tab" aria-controls="py" aria-selected="false">Python</button>
+            </li>
+            <li class="nav-item" role="presentation">
+            <button class="nav-link" id="contact-tab" data-bs-toggle="tab" data-bs-target="#cpp" type="button" role="tab" aria-controls="cpp" aria-selected="false">C++</button>
+            </li>
+        </ul>
+        <div class="row">
+        <div class="tab-content dark  p-3 border border-primary col-sm g" id="myTabContent">
+            <div class="tab-pane fade show active" id="js" role="tabpanel" aria-labelledby="home-tab">
+                <pre>
+                    <code class="javascript">   
+function quickSort(array, start, end) {
+    if (start === undefined) {
+        start = 0;
+        end = array.length - 1;
+    } else if (start >= end) {
+        return array;
+    }
+    var rStart = start, rEnd = end;
+    var pivot = array[Math.floor(Math.random() * (end - start + 1) + start)];
+    while (start < end) {
+        while (array[start] <= pivot) start++;
+        while (array[end] > pivot) end--;
+        if (start < end) {
+        var temp = array[start];
+        array[start] = array[end];
+        array[end] = temp;
+        }
+    }
+    quickSort(array, rStart, start - 1);
+    quickSort(array, start, rEnd);
+    }
+                    
+                    </code>
+                </pre>
+        </div>
+        <div class="tab-pane fade" id="py" role="tabpanel" aria-labelledby="profile-tab">
+            <pre>
+                <code class="python">
+def partition(array, start, end):
+    pivot = array[start]
+    low = start + 1
+    high = end
+
+    while True:
+        while low <= high and array[high] >= pivot:
+            high = high - 1
+
+        while low <= high and array[low] <= pivot:
+            low = low + 1
+
+        if low <= high:
+            array[low], array[high] = array[high], array[low]
+        else:
+            break
+
+    array[start], array[high] = array[high], array[start]
+
+    return high
+
+def quick_sort(array, start, end):
+    if start >= end:
+        return
+
+    p = partition(array, start, end)
+    quick_sort(array, start, p-1)
+    quick_sort(array, p+1, end)
+
+                </code>
+            </pre>
+        </div>
+            <div class="tab-pane fade" id="cpp" role="tabpanel" aria-labelledby="contact-tab">
+                <pre>
+                    <code class="cpp">
+void swap(int* a, int* b)
+{
+    int t = *a;
+    *a = *b;
+    *b = t;
+}
+
+int partition (int arr[], int low, int high)
+{
+    int pivot = arr[high];
+    int i = (low - 1);
+
+    for (int j = low; j <= high- 1; j++)
+    {
+        if (arr[j] <= pivot)
+        {
+            i++;
+            swap(&arr[i], &arr[j]);
+        }
+    }
+    swap(&arr[i + 1], &arr[high]);
+    return (i + 1);
+}
+
+void quickSort(int arr[], int low, int high)
+{
+    if (low < high)
+    {
+        int pivot = partition(arr, low, high);
+
+        quickSort(arr, low, pivot - 1);
+        quickSort(arr, pivot + 1, high);
+    }
+}
+                    </code>
+                </pre>
+            </div>
+        </div>
+
+        <div id="description" class="border border-primary col-sm p-5">
+            <h4>Общее описание</h4>
+            <p>
+                Быстрая сортировка, или Quick Sort, — это высокоэффективный алгоритм сортировки, разработанный Тони Хоаром в 1960 году. 
+                Этот алгоритм использует стратегию "разделяй и властвуй" (divide and conquer) для эффективной сортировки массива.
+                Процесс заключается в выборе опорного элемента (pivot) и разделении массива на две части, где элементы меньше опорного 
+                размещаются слева, а элементы больше — справа. Затем рекурсивно применяется та же самая процедура к каждой из частей, 
+                пока массивы не будут полностью отсортированы.
+            </p>
+            
+            <h4>Основные шаги алгоритма</h4>
+            <ul>
+                <li>Выбор опорного элемента (pivot).</li>
+                <li>Разделение массива: все элементы, меньшие опорного, перемещаются влево, а большие — вправо.</li>
+                <li>Рекурсивная сортировка левой и правой частей массива.</li>
+                <li>Объединение отсортированных частей.</li>
+            </ul>
+            
+            <h4 class="mb-3">Сложность алгоритма</h4>
+            <table class="table table-dark table-bordered">
+                <thead>
+                    <tr>
+                        <th scope="col">Сценарий</th>
+                        <th scope="col">Сложность</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Средний и лучший случай</td>
+                        <td>O(n * lo(n))</td>
+                    </tr>
+                    <tr>
+                        <td>Худший случай</td>
+                        <td>O(n²)</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <p>
+                Быстрая сортировка является одним из самых популярных алгоритмов благодаря своей высокой производительности 
+                и эффективности в реальных приложениях. Несмотря на то, что худший случай имеет сложность O(n²), он редко 
+                встречается на практике, особенно при использовании хороших стратегий выбора опорного элемента.
+            </p>
+        </div>
+        
+
+
+    </div>
+
+</div>
+
+</body>
+<script type="module" src="../index.js"></script>
+<script type="module" src="../sortScripts/quickSort.js"></script>
+</html>
