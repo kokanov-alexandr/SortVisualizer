@@ -110,15 +110,33 @@ export async function processRectanglePair(a, b) {
 function sortUserRectangles() {
   let window = document.getElementById("mainWindow");
   window.innerHTML = "";
+
   let windowWidth = window.offsetWidth / userNumbers.length;
+
   let max = Math.max(...userNumbers);
-  let windowHeigth = (window.offsetHeight - 6) / max;
+  let min = Math.min(...userNumbers);
+
+  let logMax = Math.log10(max > 1 ? max : 1);
+  let logMin = Math.log10(min > 1 ? min : 1);
+
+  let windowHeigth = window.offsetHeight - 6;
+
+  const MIN_HEIGHT = 5; // Пикселей
+
   let rectangles = [];
   for (let i = 0; i < userNumbers.length; i++) {
-    rectangles.push(
-      getRectangle(windowWidth, windowHeigth * userNumbers[i] - 1)
-    );
+    let logValue = Math.log10(userNumbers[i] > 1 ? userNumbers[i] : 1); // Заменяем значения <= 1
+    let normalizedLogValue = (logValue - logMin) / (logMax - logMin);
+    let scaledHeight = normalizedLogValue * windowHeigth;
+    scaledHeight = Math.max(scaledHeight, MIN_HEIGHT);
+    let rect = getRectangle(windowWidth, scaledHeight - 1);
+    rect.style.backgroundColor = `rgba(0, 0, 255, ${
+      0.5 + 0.5 * normalizedLogValue
+    })`;
+
+    rectangles.push(rect);
   }
+
   rectangles.sort(function (a, b) {
     if (getHeightAsNumber(a) < getHeightAsNumber(b)) {
       return -1;
@@ -157,41 +175,25 @@ export function initMainWindowUserNumbers() {
   let window = document.getElementById("mainWindow");
   window.innerHTML = "";
 
-  // Определяем ширину прямоугольника
   let windowWidth = window.offsetWidth / userNumbers.length;
 
-  // Найдем минимальное и максимальное значения
   let max = Math.max(...userNumbers);
   let min = Math.min(...userNumbers);
 
-  // Избегаем логарифма от нуля или отрицательных значений, используя минимальное положительное значение 1
   let logMax = Math.log10(max > 1 ? max : 1);
   let logMin = Math.log10(min > 1 ? min : 1);
 
-  // Высота окна
   let windowHeigth = window.offsetHeight - 6;
 
-  // Устанавливаем минимальную высоту для элементов, чтобы они были видимы
   const MIN_HEIGHT = 5; // Пикселей
 
   let rectangles = [];
   for (let i = 0; i < userNumbers.length; i++) {
-    // Логарифмическое значение
-    let logValue = Math.log10(userNumbers[i] > 1 ? userNumbers[i] : 1); // Заменяем значения <= 1 на 1 для логарифма
-
-    // Нормализация логарифмического значения к диапазону [0, 1]
+    let logValue = Math.log10(userNumbers[i] > 1 ? userNumbers[i] : 1); // Заменяем значения <= 1
     let normalizedLogValue = (logValue - logMin) / (logMax - logMin);
-
-    // Масштабирование нормализованного логарифмического значения к высоте окна
     let scaledHeight = normalizedLogValue * windowHeigth;
-
-    // Добавляем минимальную высоту для видимости
     scaledHeight = Math.max(scaledHeight, MIN_HEIGHT);
-
-    // Создание и добавление прямоугольника с нормализованной высотой
     let rect = getRectangle(windowWidth, scaledHeight - 1);
-
-    // Настраиваем цвет в зависимости от высоты для лучшего восприятия
     rect.style.backgroundColor = `rgba(0, 0, 255, ${
       0.5 + 0.5 * normalizedLogValue
     })`;
